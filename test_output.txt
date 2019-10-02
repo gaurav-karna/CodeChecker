@@ -1,0 +1,93 @@
+AUTHOR - Gaurav K. Karna | Copyright Gaurav K. Karna 2019
+Capital One Assessment 2019 - Software Developer
+###################################
+
+Testing input file starting with .
+-+-+-+-+-+-PROGRAM OUTPUT-+-+-+-+-+-
+File passed in starts with a '.', ignoring...
+Program complete.
+-+-+-+-+-+-FILE CONTENT-+-+-+-+-+-
+[testing purposes only] - should not be parsed
+
+###################################
+Testing input file with no extension
+-+-+-+-+-+-PROGRAM OUTPUT-+-+-+-+-+-
+File passed in does not have an extension, ignoring...
+Program complete.
+-+-+-+-+-+-FILE CONTENT-+-+-+-+-+-
+[testing purposes] - should not be parsed
+
+###################################
+Testing input file with invalid extension
+-+-+-+-+-+-PROGRAM OUTPUT-+-+-+-+-+-
+File extension not supported. Please use one of the following:
+(['.py', '.java', '.js', '.c', '.cpp', ',go', '.cs', '.ts'])
+-+-+-+-+-+-FILE CONTENT-+-+-+-+-+-
+[testing purposes] - should not be parsed
+
+###################################
+Testing Java/JS/TS/C/C++/Go/C# and other Slash-based comment syntax languages
+-+-+-+-+-+-PROGRAM OUTPUT-+-+-+-+-+-
+.java
+Finished parsing java_test.java:
+Total # of lines: 24
+Total # of comment lines: 16
+Total # of single line comments: 3
+Total # of comment lines within block comments: 13
+Total # of block line comments: 2
+Total # of TODOs: 1
+-+-+-+-+-+-FILE CONTENT-+-+-+-+-+-
+package Hello;
+
+/*wow
+ * i 
+ * hope
+ * this 
+ * works!!!
+ *
+ */
+public class Tester {
+
+	public static void main(String[] args) {
+		System.out.println("Hello world"); // inline comment
+		// comment by itself
+		/*
+		 *
+		 * multi
+		 * line
+		 * comment
+		 */
+		// TODO: GET HIRED!
+	}
+
+}
+###################################
+Testing Python and other hash-based comment syntax lanugages
+-+-+-+-+-+-PROGRAM OUTPUT-+-+-+-+-+-
+.py
+Finished parsing python_test.py:
+Total # of lines: 16
+Total # of comment lines: 9
+Total # of single line comments: 3
+Total # of comment lines within block comments: 6
+Total # of block line comments: 1
+Total # of TODOs: 1
+-+-+-+-+-+-FILE CONTENT-+-+-+-+-+-
+import sys
+import os
+
+
+# single line comment
+x = 5
+print('Hello CapitalOne! Hope you guys like this') # trailing comment
+'''
+this
+is a 
+multi
+line comment 
+'''
+print('Hope this works 2.0!')
+
+# TODO: GET HIRED!
+###################################
+############END OF TEST############

@@ -1,9 +1,11 @@
+
+# AUTHOR - Gaurav K. Karna | Copyright Gaurav K. Karna 2019
+
 import sys
 import os.path
-import re
 import argparse
 
-# Declare Global Vasriables
+# Declare Global Variables
 
 # results of program
 CRITERIA = {
@@ -17,20 +19,20 @@ CRITERIA = {
 
 # Since multiple programming languages share // , /*, and */ as comments, it's more efficient to create one resource
 # instead of multiple lists in the below dictionary
-SLASHES = ['//', '/*', '*/']
+SLASHES = ['//', '/*', '*/', ['"']]
 
 # dictionary where keys are extensions, and values are list of comment syntax for the different languages
 # first value in list is single line comment, second is start of block, third is end of block
+# the fourth value is a list of the ways in which the language supports Strings
 SUPPORTED_FILE_TYPES = {
-    '.py': ['#', '\'\'\'', '\'\'\''],
+    '.py': ['#', '\'\'\'', '\'\'\'', ['\'', '"']],
     '.java': SLASHES,
-    '.js': SLASHES,
+    '.js': ['//', '/*', '*/', ['\'', '"']],
     '.c': SLASHES,
     '.cpp': SLASHES,
     ',go': SLASHES,
     '.cs': SLASHES,
-    '.ts': SLASHES,
-    '.rb': ['#', '=begin', '=end']
+    '.ts': ['//', '/*', '*/', ['\'', '"']],
 }
 
 # will be used throughout codebase to ensure parsing of comments is done correctly
@@ -71,11 +73,69 @@ def start():
                 if is_todo(line):
                     CRITERIA['total_todo'] += 1
                 continue
+            if is_code_with_comment(line):
+                CRITERIA['total_comments'] += 1
+                continue
+    result()
 
 
 # checks if the string is a line of code with a trailing comment
 def is_code_with_comment(s):
-    pass
+    global SUPPORTED_FILE_TYPES
+    global FILE_TYPE
+    global CRITERIA
+    # major caveat is to ensure the comment syntax is not within a string or similar escape characters
+    in_str = False
+    escaped = False     # True if the previous character was an escape character
+    first_slash = False     # True if current character is a slash - useful for determining comments with SLASHES
+    py_multi_count = 0      # Counts number of ' encountered previously
+    for count, current_char in enumerate(s):
+        if escaped:             # previous escape character means we can disregard the current character
+            escaped = False
+            continue
+        if not in_str:
+            if current_char == '\\':        # escape character encountered
+                escaped = True
+                continue
+            if current_char in SUPPORTED_FILE_TYPES[FILE_TYPE][3]:      # character is starting a string
+                in_str = True
+                continue
+            if current_char == SUPPORTED_FILE_TYPES[FILE_TYPE][0][0]:      # checks if character is == to '#' or '/'
+                if current_char == '/':
+                    if not first_slash:
+                        first_slash = True
+                        continue
+                    else:                   # first slash encountered + second slash encountered = single comment!
+                        CRITERIA['total_single_line_comments'] += 1
+                        if is_todo(s[count:]):  # passing rest of comment to check TODO
+                            CRITERIA['total_todo'] += 1
+                        return True
+                elif current_char == '*' and first_slash:  # first slash encountered + asterisk = multi-block comment!
+                    CRITERIA['total_block_line_comments'] += 1
+                    CRITERIA['total_blocks'] += 1
+                    if is_todo(s[count:]):  # passing rest of comment to check TODO
+                        CRITERIA['total_todo'] += 1
+                    global BLOCK_FLAG
+                    BLOCK_FLAG = True  # end of block comment handled in start()
+                    return True
+                elif current_char == '#':
+                    first_slash = False     # not a SLASH comment, likely Python single line comment
+                    CRITERIA['total_single_line_comments'] += 1
+                    if is_todo(s[count:]):                                  # passing rest of comment to check TODO
+                        CRITERIA['total_todo'] += 1
+                    return True
+            # if current_char == SUPPORTED_FILE_TYPES[FILE_TYPE][1]:      # start of block comment after code
+            #     CRITERIA['total_block_line_comments'] += 1
+            #     CRITERIA['total_blocks'] += 1
+            #     if is_todo(s[count:]):                                  # passing rest of comment to check TODO
+            #         CRITERIA['total_todo'] += 1
+            #     global BLOCK_FLAG
+            #     BLOCK_FLAG = True                                       # end of block comment handled in start()
+            #     return True
+        else:
+            if current_char in SUPPORTED_FILE_TYPES[FILE_TYPE][3] and not escaped:
+                in_str = False
+    return False
 
 
 # checks if the string is a comment
@@ -146,7 +206,19 @@ def sanity():
     # Extension found, now let's parse...
 
 
+def result():
+    global CRITERIA
+    print('Finished parsing {}:'.format(args.file))
+    print('Total # of lines: {}'.format(CRITERIA['total_lines']))
+    print('Total # of comment lines: {}'.format(CRITERIA['total_comments']))
+    print('Total # of single line comments: {}'.format(CRITERIA['total_single_line_comments']))
+    print('Total # of comment lines within block comments: {}'.format(CRITERIA['total_block_line_comments']))
+    print('Total # of block line comments: {}'.format(CRITERIA['total_blocks']))
+    print('Total # of TODOs: {}'.format(CRITERIA['total_todo']))
+
+
 if __name__ == '__main__':
     args = parse_input()
     sanity()
+    print(FILE_TYPE)
     start()
