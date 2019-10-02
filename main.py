@@ -124,14 +124,6 @@ def is_code_with_comment(s):
                     if is_todo(s[count:]):                                  # passing rest of comment to check TODO
                         CRITERIA['total_todo'] += 1
                     return True
-            # if current_char == SUPPORTED_FILE_TYPES[FILE_TYPE][1]:      # start of block comment after code
-            #     CRITERIA['total_block_line_comments'] += 1
-            #     CRITERIA['total_blocks'] += 1
-            #     if is_todo(s[count:]):                                  # passing rest of comment to check TODO
-            #         CRITERIA['total_todo'] += 1
-            #     global BLOCK_FLAG
-            #     BLOCK_FLAG = True                                       # end of block comment handled in start()
-            #     return True
         else:
             if current_char in SUPPORTED_FILE_TYPES[FILE_TYPE][3] and not escaped:
                 in_str = False
@@ -220,5 +212,4 @@ def result():
 if __name__ == '__main__':
     args = parse_input()
     sanity()
-    print(FILE_TYPE)
     start()
