@@ -1,4 +1,4 @@
-# CodeChecker
+# CodeChecker :computer:
 Capital One Assessment - Software Developer 2019
 
 ## Purpose
@@ -14,14 +14,14 @@ Run the test via ```bash run_test.bash```, and see the output in ```test_output.
 You can run the code simply with ```python3 main.py -f <filename>```. 
 
 Supported extensions/languages are currently:
-- [ ] Python
-- [ ] Java
-- [ ] Javascript
-- [ ] TypeScript
-- [ ] C
-- [ ] C++
-- [ ] C#
-- [ ] GoLang
+- [x] Python
+- [x] Java
+- [x] Javascript
+- [x] TypeScript
+- [x] C
+- [x] C++
+- [x] C#
+- [x] GoLang
 
 However, it will work with any language that uses either ```//```, ```/*``` and ```*/``` OR ```#``` and ```'''``` for its comment syntax.
 
