@@ -30,7 +30,7 @@ SUPPORTED_FILE_TYPES = {
     '.js': ['//', '/*', '*/', ['\'', '"']],
     '.c': SLASHES,
     '.cpp': SLASHES,
-    ',go': SLASHES,
+    '.go': SLASHES,
     '.cs': SLASHES,
     '.ts': ['//', '/*', '*/', ['\'', '"']],
 }
