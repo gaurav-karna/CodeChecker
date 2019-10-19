@@ -1,5 +1,4 @@
 # CodeChecker :computer:
-Capital One Assessment - Software Developer 2019
 
 ## Purpose
 This repository assesses a program file and outputs the number of in-line, regular, and block comments. 
@@ -26,6 +25,5 @@ Supported extensions/languages are currently:
 However, it will work with any language that uses either ```//```, ```/*``` and ```*/``` OR ```#``` and ```'''``` for its comment syntax.
 
 ## Remarks
-Thanks for the opportunity CapitalOne! Looking forward to hearing back :blush:
-
-- Gaurav.
+All Rights Reserved.
+Copyright Gaurav Kumar Karna 2019
